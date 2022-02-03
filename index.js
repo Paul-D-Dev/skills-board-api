@@ -1,8 +1,11 @@
-const express = require('express');
-const { google } = require('googleapis');
+import express from "express";
+import {google} from "googleapis";
+import {mappingDataSheet} from "./shared/functions/mappingDataSheet.js";
+import {config} from "dotenv";
+
 const app = express();
 const port = 3000;
-require('dotenv').config();
+config();
 
 app.get('/', async (req, res) => {
 
@@ -46,8 +49,8 @@ app.get('/stackers', async (req, res) => {
         spreadsheetId,
         range: 'Stakers!A:C'
     })
-
-    res.send(rowsData.data);
+    const stackers = mappingDataSheet(rowsData.data.values);
+    res.send(stackers);
 })
 
 app.listen(port, () => console.log('Express 3000'));

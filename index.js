@@ -24,12 +24,29 @@ app.get('/', async (req, res) => {
         spreadsheetId
     })
 
+    res.send(metaData.data);
+})
+
+app.get('/stackers', async (req, res) => {
+    const auth = new google.auth.GoogleAuth({
+        keyFile: process.env.GOOGLE_APPLICATION_CREDENTIALS,
+        scopes: 'https://www.googleapis.com/auth/spreadsheets'
+    })
+
+    // Create client instance for auth
+    const client = await auth.getClient();
+
+    // Instance of Google Sheet API
+    const sheets = google.sheets({version: 'v4', auth: client});
+    const spreadsheetId = process.env.SHEET_ID;
+
     // Read rows from spreadsheet
     const rowsData = await sheets.spreadsheets.values.get({
         auth,
         spreadsheetId,
         range: 'Stakers!A:C'
     })
+
     res.send(rowsData.data);
 })
 

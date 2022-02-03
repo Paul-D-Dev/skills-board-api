@@ -23,7 +23,14 @@ app.get('/', async (req, res) => {
         auth,
         spreadsheetId
     })
-    res.send(metaData.data);
+
+    // Read rows from spreadsheet
+    const rowsData = await sheets.spreadsheets.values.get({
+        auth,
+        spreadsheetId,
+        range: 'Stakers!A:C'
+    })
+    res.send(rowsData.data);
 })
 
 app.listen(port, () => console.log('Express 3000'));

@@ -2,11 +2,14 @@ import express from "express";
 import {google} from "googleapis";
 import {mappingDataSheet} from "./shared/functions/mappingDataSheet.js";
 import {config} from "dotenv";
+import cors from "cors";
 
 const app = express();
 const port = 3000;
 config();
 
+app.use(cors());
+app.use(express.urlencoded({ extended: false }));
 app.get('/', async (req, res) => {
 
     const auth = new google.auth.GoogleAuth({
@@ -47,7 +50,7 @@ app.get('/stackers', async (req, res) => {
     const rowsData = await sheets.spreadsheets.values.get({
         auth,
         spreadsheetId,
-        range: 'Stakers!A:C'
+        range: 'Stackers!A:D'
     })
     const stackers = mappingDataSheet(rowsData.data.values);
     res.send(stackers);

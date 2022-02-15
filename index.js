@@ -50,7 +50,7 @@ app.get('/stackers', async (req, res) => {
     const rowsData = await sheets.spreadsheets.values.get({
         auth,
         spreadsheetId,
-        range: 'Stackers!A:D'
+        range: 'Stackers!A:G'
     })
     const stackers = mappingDataSheet(rowsData.data.values);
     res.send(stackers);
